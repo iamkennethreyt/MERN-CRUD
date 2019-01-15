@@ -1,6 +1,6 @@
-# LOGIN APPLICATOPN
+# CREATE READ UPDATE DELETE APPLICATOPN
 
-> Login application built with the [M](https://www.mongodb.com/)[E](https://expressjs.com/)[R](https://reactjs.org/)[N](https://nodejs.org/) stack along with Redux for state management
+> Crud application built with the [M](https://www.mongodb.com/)[E](https://expressjs.com/)[R](https://reactjs.org/)[N](https://nodejs.org/) stack along with Redux for state management
 
 ## Quick Start
 
@@ -25,7 +25,7 @@ npm run client
 
 ## App Info
 
-The application can only be register an account, login, and change the password
+The application can only be add user, view the profile, edit the profile, and delete
 
 ### Note
 

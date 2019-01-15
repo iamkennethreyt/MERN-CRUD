@@ -1,16 +1,9 @@
 const express = require("express");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const passport = require("passport");
 
 const router = express.Router();
 
-const key = require("../../config/key").secretOrkey;
-
 //load validation
 const ValidateRegisterInput = require("../../validations/register");
-const ValidateLoginInput = require("../../validations/login");
-const validateAccountSettingsInput = require("../../validations/accountSettings");
 
 //load User model
 const User = require("../../models/User");
@@ -28,130 +21,75 @@ router.post("/register", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  User.findOne({ username: req.body.username }).then(user => {
-    errors.username = "Username already exists";
-    if (user) {
-      return res.status(400).json(errors);
-    } else {
-      const newUSer = new User({
-        name: req.body.name,
-        username: req.body.username,
-        password: req.body.password
-      });
-
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUSer.password, salt, (err, hash) => {
-          if (err) throw err;
-          newUSer.password = hash;
-          newUSer
-            .save()
-            .then(user => res.json(user))
-            .catch(err => console.log(err));
-        });
-      });
-    }
+  const newUSer = new User({
+    firstname: req.body.firstname,
+    lastname: req.body.lastname
   });
+
+  newUSer
+    .save()
+    .then(user => res.json(user))
+    .catch(err => console.log(err));
 });
 
-//@route    POST api/users/login
-//@desc     login user and returning  JWT web token
+//@route    GET api/users/
+//@desc     Show all users
 //@access   public
-router.post("/login", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  const { errors, isValid } = ValidateLoginInput(req.body);
-
-  //check validation
-  if (!isValid) {
-    return res.status(400).json(errors);
-  }
-
-  //Find User by Email
-  User.findOne({ username }).then(user => {
-    //chech user
-    if (!user) {
-      errors.username = "Username not found";
-      return res.status(404).json(errors);
-    }
-
-    //check password
-    bcrypt.compare(password, user.password).then(isMatch => {
-      if (isMatch) {
-        //user  matched
-
-        //create JWT payload
-        const payload = {
-          id: user.id,
-          name: user.name,
-          username: user.username
-        };
-
-        //sign token
-        jwt.sign(payload, key, { expiresIn: 3600 }, (err, token) => {
-          res.json({
-            token: "Bearer " + token
-          });
-        });
-      } else {
-        errors.password = "Password incorrect";
-        return res.status(400).json(errors);
-      }
-    });
-  });
+router.get("/", (req, res) => {
+  User.find()
+    .then(user => {
+      res.json(user);
+    })
+    .catch(err => res.status(404).json(errors));
 });
 
-//@route    POST api/users/accountsettings
-//@desc     account settings change password
-//@access   private
-router.post(
-  "/accountsettings",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    const { errors, isValid } = validateAccountSettingsInput(req.body);
-
-    //check validation
-    if (!isValid) {
-      return res.status(400).json(errors);
-    }
-
-    //check password
-    bcrypt.compare(req.body.password, req.user.password).then(isMatch => {
-      if (isMatch) {
-        User.findById(req.user.id, (err, user) => {
-          if (err) throw err;
-
-          bcrypt.genSalt(10, (err, salt) => {
-            if (err) throw err;
-
-            bcrypt.hash(req.body.password3, salt, (err, hash) => {
-              if (err) throw err;
-
-              user.password = hash;
-              user
-                .save()
-                .then(user => res.json(user))
-                .catch(err => console.log(err));
-            });
-          });
-        });
+//@route    GET api/users/profile/:id
+//@desc     Show user based on the params
+//@access   public
+router.get("/profile/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      if (!user) {
+        res.status({ error: "No Profile that found" });
       } else {
-        errors.password = "Password is incorrect";
-        return res.status(400).json(errors);
+        res.json(user);
       }
-    });
-  }
-);
+    })
+    .catch(() => res.status(404).json({ error: "No Profile that found" }));
+});
 
-//@route    GET api/users/current
-//@desc     return current user
-//@access   private
-router.get(
-  "/current",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    res.json(req.user);
-  }
-);
+//@route    PUT api/users/edit/:id
+//@desc     edit user based on the params
+//@access   public
+router.put("/edit/:id", (req, res) => {
+  User.findById(req.params.id)
+    .then(user => {
+      if (!user) {
+        res.status({ error: "No Profile that found" });
+      } else {
+        const userFields = {};
 
+        if (req.body.firstname) userFields.firstname = req.body.firstname;
+        if (req.body.lastname) userFields.lastname = req.body.lastname;
+
+        User.findOneAndUpdate(
+          { _id: req.params.id },
+          { $set: userFields },
+          { new: true }
+        ).then(user => res.json(user));
+      }
+    })
+    .catch(() => res.status(404).json({ error: "No Profile that found" }));
+});
+
+// @route   DELETE api/users/:id
+// @desc    Delete advertisment
+// @access  Private
+router.delete("/:id", (req, res) => {
+  User.findOneAndDelete({
+    _id: req.params.id
+  })
+    .then(success => res.json(success))
+    .catch(err => res.status(404).json(err));
+});
 module.exports = router;

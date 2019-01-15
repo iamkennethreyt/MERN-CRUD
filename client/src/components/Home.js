@@ -1,30 +1,71 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { getUsers, deleteUser } from "../actions/userActions";
 import { Link } from "react-router-dom";
 
 class Home extends Component {
+  componentDidMount() {
+    this.props.getUsers();
+  }
+
   render() {
-    const { isAuthenticated, user } = this.props.auth;
     return (
       <div className="container">
-        <h1>{isAuthenticated ? user.name : "Welcome to my login app"}</h1>
-        {isAuthenticated ? (
-          <Link to="/accountsettings" className="btn purple text-white my-4">
-            Change Password
+        <div className="d-flex justify-content-between">
+          <h1>CRUD</h1>
+          <Link to="/register" className="btn btn-outline-warning mr-1">
+            ADD
           </Link>
-        ) : null}
+        </div>
+        <ul className="list-group">
+          {this.props.users.map((user, i) => {
+            return (
+              <li
+                key={i}
+                className="list-group-item d-flex justify-content-between align-items-center"
+              >
+                {user.firstname + " " + user.lastname}
+                <p>
+                  <Link
+                    to={`/edit/${user._id}`}
+                    className="btn btn-sm btn-outline-primary mr-1"
+                  >
+                    edit
+                  </Link>
+                  <Link
+                    to={`/profile/${user._id}`}
+                    className="btn btn-sm btn-outline-secondary mr-1"
+                  >
+                    view
+                  </Link>
+                  <button
+                    className="btn btn-sm btn-outline-danger mr-1"
+                    onClick={() => this.props.deleteUser(user._id)}
+                  >
+                    delete
+                  </button>
+                </p>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     );
   }
 }
 
 Home.propTypes = {
-  auth: PropTypes.object.isRequired
+  getUsers: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  users: PropTypes.array.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  users: state.users.users
 });
 
-export default connect(mapStateToProps)(Home);
+export default connect(
+  mapStateToProps,
+  { getUsers, deleteUser }
+)(Home);

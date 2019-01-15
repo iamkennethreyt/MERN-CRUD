@@ -1,29 +1,20 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import classnames from "classnames";
-
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-
-import { registerUser } from "../actions/authActions";
+import { Link } from "react-router-dom";
+import classnames from "classnames";
+import { registerUser } from "../actions/userActions";
 
 class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: "",
-      username: "",
-      password: "",
-      password2: "",
-      errors: {}
-    };
-  }
+  state = {
+    firstname: "",
+    lastname: "",
+    errors: {}
+  };
 
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/");
-    }
-  }
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.errors) {
@@ -31,108 +22,72 @@ class Register extends Component {
     }
   }
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
   onSubmit = e => {
     e.preventDefault();
 
-    const newUser = {
-      name: this.state.name,
-      username: this.state.username,
-      password: this.state.password,
-      password2: this.state.password2
+    const newData = {
+      firstname: this.state.firstname,
+      lastname: this.state.lastname
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    this.props.registerUser(newData, this.props.history);
   };
 
   render() {
     const { errors } = this.state;
     return (
-      <div className="row">
-        <div className="col-md-4 m-auto">
-          <form className="border border-light p-5" onSubmit={this.onSubmit}>
-            <p className="h4 mb-4">Sign up</p>
+      <div className="container">
+        <form className="border border-light p-5" onSubmit={this.onSubmit}>
+          <input
+            type="text"
+            className={classnames("form-control mt-2", {
+              "is-invalid": errors.firstname
+            })}
+            placeholder="First Name"
+            name="firstname"
+            value={this.state.firstname}
+            onChange={this.onChange}
+          />
+          {errors.firstname && (
+            <div className="invalid-feedback">{errors.firstname}</div>
+          )}
 
-            <input
-              type="text"
-              className={classnames("form-control mt-4", {
-                "is-invalid": errors.name
-              })}
-              placeholder="Full name"
-              name="name"
-              value={this.state.name}
-              onChange={this.onChange}
-            />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name}</div>
-            )}
+          <input
+            type="text"
+            className={classnames("form-control mt-2", {
+              "is-invalid": errors.lastname
+            })}
+            placeholder="Last Name"
+            name="lastname"
+            value={this.state.lastname}
+            onChange={this.onChange}
+          />
+          {errors.lastname && (
+            <div className="invalid-feedback">{errors.lastname}</div>
+          )}
 
-            <input
-              type="text"
-              className={classnames("form-control mt-4", {
-                "is-invalid": errors.username
-              })}
-              placeholder="User name"
-              name="username"
-              value={this.state.username}
-              onChange={this.onChange}
-            />
-            {errors.username && (
-              <div className="invalid-feedback">{errors.username}</div>
-            )}
-
-            <input
-              type="password"
-              className={classnames("form-control mt-4", {
-                "is-invalid": errors.password
-              })}
-              placeholder="Password"
-              name="password"
-              value={this.state.password}
-              onChange={this.onChange}
-            />
-            {errors.password && (
-              <div className="invalid-feedback">{errors.password}</div>
-            )}
-            <input
-              type="password"
-              className={classnames("form-control mt-4", {
-                "is-invalid": errors.password2
-              })}
-              placeholder="Confirm password"
-              name="password2"
-              value={this.state.password2}
-              onChange={this.onChange}
-            />
-            {errors.password2 && (
-              <div className="invalid-feedback">{errors.password2}</div>
-            )}
-            <button className="btn purple btn-block my-4" type="submit">
-              Sign up
-            </button>
-          </form>
-        </div>
+          <button className="btn red accent-4 btn-block mt-4" type="submit">
+            Save
+          </button>
+          <Link to="/" className="btn btn-outline-danger btn-block mt-2">
+            Cancel
+          </Link>
+        </form>
       </div>
     );
   }
 }
 
-// PROP TYPE
-Register.protoTypes = {
+Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
   errors: state.errors
 });
 
 export default connect(
   mapStateToProps,
   { registerUser }
-)(withRouter(Register));
+)(Register);
