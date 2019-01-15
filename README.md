@@ -1,4 +1,4 @@
-# CREATE READ UPDATE DELETE APPLICATOPN
+# CREATE READ UPDATE DELETE APPLICATION
 
 > Crud application built with the [M](https://www.mongodb.com/)[E](https://expressjs.com/)[R](https://reactjs.org/)[N](https://nodejs.org/) stack along with Redux for state management
 
@@ -26,8 +26,6 @@ npm run client
 ## App Info
 
 The application can only be add user, view the profile, edit the profile, and delete
-
-### Note
 
 ### Note
 
