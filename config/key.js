@@ -1,3 +1,4 @@
 module.exports = {
-  mongoURI: "mongodb://localhost:27017/crud"
+  mongoURI:
+    "mongodb+srv://admin:admin123@kennethreycluster-nasvw.mongodb.net/merncrud?retryWrites=true"
 };

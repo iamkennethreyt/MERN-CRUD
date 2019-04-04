@@ -6,7 +6,7 @@ const router = express.Router();
 const ValidateRegisterInput = require("../../validations/register");
 
 //load User model
-const User = require("../../models/User");
+const User = require("../../models/Student");
 
 router.get("/test", (req, res) => res.json({ name: "hello world" }));
 

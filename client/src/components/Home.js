@@ -13,10 +13,15 @@ class Home extends Component {
     return (
       <div className="container">
         <div className="d-flex justify-content-between">
-          <h1>CRUD</h1>
-          <Link to="/register" className="btn btn-outline-warning mr-1">
-            ADD
-          </Link>
+          <div>
+            <h1>CREATE READ UPDATE DELETE</h1>
+            <h4>using MongoDB Express.js React.js and Node.js</h4>
+          </div>
+          <div>
+            <Link to="/register" className="btn btn-outline-warning mr-1">
+              ADD
+            </Link>
+          </div>
         </div>
         <ul className="list-group">
           {this.props.users.map((user, i) => {

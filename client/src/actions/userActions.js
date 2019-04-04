@@ -56,6 +56,7 @@ export const registerUser = (data, history) => dispatch => {
       });
       history.push("/");
     })
+    .then(() => dispatch({ type: GET_ERRORS, payload: {} }))
     .catch(err =>
       dispatch({
         type: GET_ERRORS,

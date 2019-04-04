@@ -1,24 +1,25 @@
 {
-  "name": "atracker",
+  "name": "merncrud",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "scripts": {
     "client-install": "npm install --prefix client",
+    "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm start --prefix client",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/iamkennethreyt/atracker.git"
+    "url": "git+https://github.com/iamkennethreyt/MERN-CRUD.git"
   },
   "author": "Kenneth Rey Tamis",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/iamkennethreyt/atracker/issues"
+    "url": "https://github.com/iamkennethreyt/MERN-CRUD/issues"
   },
-  "homepage": "https://github.com/iamkennethreyt/atracker#readme",
+  "homepage": "https://github.com/iamkennethreyt/MERN-CRUD#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",

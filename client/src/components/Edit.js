@@ -60,7 +60,7 @@ class Edit extends Component {
               })}
               placeholder="First Name"
               name="firstname"
-              value={this.state.firstname}
+              defaultValue={this.state.firstname}
               onChange={this.onChange}
             />
             {errors.firstname && (
@@ -74,7 +74,7 @@ class Edit extends Component {
               })}
               placeholder="Last Name"
               name="lastname"
-              value={this.state.lastname}
+              defaultValue={this.state.lastname}
               onChange={this.onChange}
             />
             {errors.lastname && (
