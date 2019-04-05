@@ -2,6 +2,8 @@
 
 > Crud application built with the [M](https://www.mongodb.com/)[E](https://expressjs.com/)[R](https://reactjs.org/)[N](https://nodejs.org/) stack along with Redux for state management
 
+see the deployed app in heroku [Link](https://obscure-dusk-16996.herokuapp.com/)
+
 ## Quick Start
 
 ```bash
