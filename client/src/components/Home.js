@@ -15,7 +15,9 @@ class Home extends Component {
         <div className="d-flex justify-content-between">
           <div>
             <h1>CREATE READ UPDATE DELETE</h1>
-            <h4>using MongoDB Express.js React.js and Node.js</h4>
+            <h4>
+              using MongoDB, Express.js, React.js with Redux and Node.js (MERN)
+            </h4>
           </div>
           <div>
             <Link to="/register" className="btn btn-outline-warning mr-1">
